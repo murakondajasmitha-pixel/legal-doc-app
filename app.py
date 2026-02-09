@@ -14,6 +14,24 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 # ===============================
+# FIX NLTK FOR STREAMLIT CLOUD
+# ===============================
+import os
+import nltk
+
+# create local nltk folder inside project
+nltk_data_path = os.path.join(os.getcwd(), "nltk_data")
+os.makedirs(nltk_data_path, exist_ok=True)
+
+# tell nltk to use that folder
+nltk.data.path.append(nltk_data_path)
+
+# download datasets to that folder
+nltk.download("punkt", download_dir=nltk_data_path)
+nltk.download("stopwords", download_dir=nltk_data_path)
+nltk.download("wordnet", download_dir=nltk_data_path)
+
+# ===============================
 # PAGE CONFIG
 # ===============================
 st.set_page_config(page_title="Legal Document Summarizer", layout="wide")
@@ -32,16 +50,7 @@ for k, v in {
     if k not in st.session_state:
         st.session_state[k] = v
 
-# ===============================
-# NLTK DOWNLOADS
-# ===============================
-@st.cache_resource
-def download_nltk():
-    nltk.download("punkt")
-    nltk.download("stopwords")
-    nltk.download("wordnet")
 
-download_nltk()
 
 # ===============================
 # DATABASE
